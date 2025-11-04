@@ -1,7 +1,11 @@
-const config = {
+// postcss.config.mjs
+// این فایل تنظیمات PostCSS هست
+// Tailwind از PostCSS استفاده می‌کنه
+// باید با ES Module باشه
+
+export default {
   plugins: {
-    "@tailwindcss/postcss": {},
+    tailwindcss: {},     // فعال‌سازی Tailwind
+    autoprefixer: {},    // اضافه کردن پیشوندهای مرورگر
   },
 };
-
-export default config;

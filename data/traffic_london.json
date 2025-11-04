@@ -1,0 +1,61 @@
+{
+  "version": 1,
+  "collections": [
+    {
+      "name": "traffic_data",
+      "documents": [
+        {
+          "name": "oxford_street",
+          "fields": {
+            "name": { "stringValue": "Oxford Street" },
+            "location": {
+              "mapValue": {
+                "fields": {
+                  "lat": { "doubleValue": 51.5155 },
+                  "lng": { "doubleValue": -0.1410 }
+                }
+              }
+            },
+            "speed_avg": { "integerValue": 28 },
+            "vehicles_count": { "integerValue": 110 },
+            "congestion": { "stringValue": "medium" }
+          }
+        },
+        {
+          "name": "westminster_bridge",
+          "fields": {
+            "name": { "stringValue": "Westminster Bridge" },
+            "location": {
+              "mapValue": {
+                "fields": {
+                  "lat": { "doubleValue": 51.5009 },
+                  "lng": { "doubleValue": -0.1218 }
+                }
+              }
+            },
+            "speed_avg": { "integerValue": 35 },
+            "vehicles_count": { "integerValue": 95 },
+            "congestion": { "stringValue": "low" }
+          }
+        },
+        {
+          "name": "piccadilly_circus",
+          "fields": {
+            "name": { "stringValue": "Piccadilly Circus" },
+            "location": {
+              "mapValue": {
+                "fields": {
+                  "lat": { "doubleValue": 51.5101 },
+                  "lng": { "doubleValue": -0.1354 }
+                }
+              }
+            },
+            "speed_avg": { "integerValue": 15 },
+            "vehicles_count": { "integerValue": 140 },
+            "congestion": { "stringValue": "high" }
+          }
+        }
+      ]
+    }
+  ]
+}
