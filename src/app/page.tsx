@@ -132,6 +132,16 @@ export default function Home() {
     alerts: data.filter((c) => c.alert).length,
     plates: data.reduce((sum, c) => sum + c.plates_count, 0),
   };
+  const [filters, setFilters] = useState({ search: "", status: "all", hasAlert: "all" });
+
+const filteredData = data.filter((item) => {
+  const matchesSearch = item.last_plate.toLowerCase().includes(filters.search) ||
+                       item.name.toLowerCase().includes(filters.search);
+  const matchesStatus = filters.status === "all" || item.status === filters.status;
+  const matchesAlert = filters.hasAlert === "all" || 
+                      (filters.hasAlert === "true") === item.alert;
+  return matchesSearch && matchesStatus && matchesAlert;
+});
 
   return (
     <>
