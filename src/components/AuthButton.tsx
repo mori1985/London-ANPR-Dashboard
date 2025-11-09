@@ -20,10 +20,23 @@ export default function AuthButton() {
     return () => unsubscribe();
   }, []);
 
-  const handleSignIn = () => signInWithPopup(auth, googleProvider);
-  const handleSignOut = () => signOut(auth);
+  const handleSignIn = async () => {
+    try {
+      await signInWithPopup(auth, googleProvider);
+    } catch (error) {
+      console.error("Sign in error:", error);
+    }
+  };
 
-  if (loading) return null;
+  const handleSignOut = async () => {
+    try {
+      await signOut(auth);
+    } catch (error) {
+      console.error("Sign out error:", error);
+    }
+  };
+
+  if (loading) return <div className="w-10 h-10 animate-pulse bg-gray-200 rounded-full" />;
 
   return user ? (
     <div className="flex items-center gap-3">

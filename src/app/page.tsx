@@ -9,7 +9,6 @@ import { collection, onSnapshot } from "firebase/firestore";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
