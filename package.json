@@ -9,19 +9,17 @@
     "export": "next export",
     "lint": "eslint"
   },
-
   "dependencies": {
     "@radix-ui/react-avatar": "^1.1.11",
     "@radix-ui/react-dialog": "^1.1.15",
     "@radix-ui/react-label": "^2.1.8",
     "@radix-ui/react-select": "^2.2.6",
     "@radix-ui/react-slot": "^1.2.4",
-    "apexcharts": "^5.3.5",
+    "apexcharts": "^5.3.6",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "firebase": "^12.4.0",
     "firebase-admin": "^13.5.0",
-    "leaflet": "^1.9.4",
     "lucide-react": "^0.548.0",
     "next": "16.0.0",
     "next-themes": "^0.4.6",
@@ -29,7 +27,6 @@
     "react-apexcharts": "^1.8.0",
     "react-dom": "19.2.0",
     "react-hot-toast": "^2.6.0",
-    "react-leaflet": "^4.2.1",
     "tailwind-merge": "^3.3.1"
   },
   "devDependencies": {
