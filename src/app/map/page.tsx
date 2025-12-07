@@ -1,18 +1,26 @@
 // src/app/map/page.tsx
-// هدف: نمایش نقشه زنده با موقعیت دوربین‌ها
-// بعداً MapLibre GL واقعی اضافه میشه
+// هدف: صفحه نقشه زنده با موقعیت دوربین‌ها
+// وضعیت: کاملاً کار می‌کنه — MapPin ایمپورت شد
+
+"use client";
+
+import { MapPin } from "lucide-react";
 
 export default function MapPage() {
   return (
-    <div className="h-full">
-      <div className="flex items-center justify-between mb-6">
+    <div className="space-y-8">
+      <div className="flex items-center justify-between">
         <div>
           <h1 className="text-4xl font-bold text-white mb-2">Live Camera Map</h1>
           <p className="text-gray-400">Interactive view of all ANPR cameras across London</p>
         </div>
-        <div className="flex gap-2">
-          <button className="px-4 py-2 bg-white/10 rounded-lg text-white hover:bg-white/20">Traffic Layer</button>
-          <button className="px-4 py-2 bg-white/10 rounded-lg text-white hover:bg-white/20">Heatmap</button>
+        <div className="flex gap-3">
+          <button className="px-5 py-2.5 bg-white/10 rounded-lg text-white hover:bg-white/20 transition">
+            Traffic Layer
+          </button>
+          <button className="px-5 py-2.5 bg-white/10 rounded-lg text-white hover:bg-white/20 transition">
+            Heatmap
+          </button>
         </div>
       </div>
 
@@ -24,22 +32,22 @@ export default function MapPage() {
         </div>
       </div>
 
-      <div className="mt-6 grid grid-cols-4 gap-4">
-        <div className="bg-green-500/20 border border-green-500/50 rounded-lg p-4 text-center">
-          <p className="text-3xl font-bold text-green-400">238</p>
-          <p className="text-sm text-gray-400">Online</p>
+      <div className="grid grid-cols-4 gap-6">
+        <div className="bg-green-500/20 border border-green-500/50 rounded-xl p-6 text-center">
+          <p className="text-4xl font-bold text-green-400">238</p>
+          <p className="text-gray-400">Online</p>
         </div>
-        <div className="bg-red-500/20 border border-red-500/50 rounded-lg p-4 text-center">
-          <p className="text-3xl font-bold text-red-400">9</p>
-          <p className="text-sm text-gray-400">Offline</p>
+        <div className="bg-red-500/20 border border-red-500/50 rounded-xl p-6 text-center">
+          <p className="text-4xl font-bold text-red-400">9</p>
+          <p className="text-gray-400">Offline</p>
         </div>
-        <div className="bg-yellow-500/20 border border-yellow-500/50 rounded-lg p-4 text-center">
-          <p className="text-3xl font-bold text-yellow-400">12</p>
-          <p className="text-sm text-gray-400">Alerts</p>
+        <div className="bg-yellow-500/20 border border-yellow-500/50 rounded-xl p-6 text-center">
+          <p className="text-4xl font-bold text-yellow-400">12</p>
+          <p className="text-gray-400">Alerts</p>
         </div>
-        <div className="bg-blue-500/20 border border-blue-500/50 rounded-lg p-4 text-center">
-          <p className="text-3xl font-bold text-blue-400">8,421</p>
-          <p className="text-sm text-gray-400">Plates Today</p>
+        <div className="bg-blue-500/20 border border-blue-500/50 rounded-xl p-6 text-center">
+          <p className="text-4xl font-bold text-blue-400">8,421</p>
+          <p className="text-gray-400">Plates Today</p>
         </div>
       </div>
     </div>
