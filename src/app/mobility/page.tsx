@@ -1,7 +1,25 @@
 // src/app/mobility/page.tsx
-// هدف: صفحه Mobility — پارکینگ، ترافیک، حمل‌ونقل
+// هدف: داده‌های پارکینگ و ترافیک رو زنده از Firestore بگیره
+
+"use client";
+
+import { useEffect, useState } from "react";
+import { db } from "@/lib/firebase";
+import { collection, onSnapshot } from "firebase/firestore";
 
 export default function MobilityPage() {
+  const [parkingData, setParkingData] = useState([]);
+
+  useEffect(() => {
+    const unsubscribe = onSnapshot(collection(db, "parking_lots"), (snapshot) => {
+      const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      setParkingData(data);
+    });
+    return () => unsubscribe();
+  }, []);
+
+  const totalFree = parkingData.reduce((sum, lot) => sum + lot.free_spaces, 0);
+
   return (
     <div className="space-y-8">
       <h1 className="text-4xl font-bold text-white">Mobility & Traffic</h1>
