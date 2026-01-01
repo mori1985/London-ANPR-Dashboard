@@ -5,18 +5,67 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Zap, Camera, MapPin, Car, Trees, HeartPulse, Calendar, Shield } from "lucide-react";
+import {
+  Zap,
+  Camera,
+  MapPin,
+  Car,
+  Trees,
+  HeartPulse,
+  Calendar,
+  Shield,
+} from "lucide-react";
 
 export default function WelcomePage() {
   const quickLinks = [
-    { title: "ANPR Cameras", icon: Camera, href: "/cameras", color: "from-purple-500 to-pink-600" },
-    { title: "Live Map", icon: MapPin, href: "/map", color: "from-blue-500 to-cyan-600" },
-    { title: "Mobility", icon: Car, href: "/mobility", color: "from-green-500 to-emerald-600" },
-    { title: "Environment", icon: Trees, href: "/environment", color: "from-teal-500 to-green-600" },
-    { title: "Energy", icon: Zap, href: "/energy", color: "from-yellow-500 to-orange-600" },
-    { title: "Health", icon: HeartPulse, href: "/health", color: "from-red-500 to-pink-600" },
-    { title: "Events", icon: Calendar, href: "/events", color: "from-indigo-500 to-purple-600" },
-    { title: "Security", icon: Shield, href: "/security", color: "from-gray-600 to-gray-800" },
+    {
+      title: "ANPR Cameras",
+      icon: Camera,
+      href: "/cameras",
+      color: "from-purple-500 to-pink-600",
+    },
+    {
+      title: "Live Map",
+      icon: MapPin,
+      href: "/map",
+      color: "from-blue-500 to-cyan-600",
+    },
+    {
+      title: "Mobility",
+      icon: Car,
+      href: "/mobility",
+      color: "from-green-500 to-emerald-600",
+    },
+    {
+      title: "Environment",
+      icon: Trees,
+      href: "/environment",
+      color: "from-teal-500 to-green-600",
+    },
+    {
+      title: "Energy",
+      icon: Zap,
+      href: "/energy",
+      color: "from-yellow-500 to-orange-600",
+    },
+    {
+      title: "Health",
+      icon: HeartPulse,
+      href: "/health",
+      color: "from-red-500 to-pink-600",
+    },
+    {
+      title: "Events",
+      icon: Calendar,
+      href: "/events",
+      color: "from-indigo-500 to-purple-600",
+    },
+    {
+      title: "Security",
+      icon: Shield,
+      href: "/security",
+      color: "from-gray-600 to-gray-800",
+    },
   ];
 
   return (
@@ -28,7 +77,8 @@ export default function WelcomePage() {
           Welcome to London Smart City Platform
         </h1>
         <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-          Real-time monitoring of traffic, environment, energy, health, and public safety — all in one intelligent dashboard.
+          Real-time monitoring of traffic, environment, energy, health, and
+          public safety — all in one intelligent dashboard.{" "}
         </p>
       </div>
 
@@ -70,7 +120,9 @@ export default function WelcomePage() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
           {quickLinks.map((link) => (
             <Link key={link.href} href={link.href}>
-              <Card className={`bg-gradient-to-br ${link.color} text-white hover:scale-105 transition-transform cursor-pointer`}>
+              <Card
+                className={`bg-gradient-to-br ${link.color} text-white hover:scale-105 transition-transform cursor-pointer`}
+              >
                 <CardContent className="pt-8 text-center">
                   <link.icon className="w-16 h-16 mx-auto mb-4" />
                   <p className="text-xl font-bold">{link.title}</p>

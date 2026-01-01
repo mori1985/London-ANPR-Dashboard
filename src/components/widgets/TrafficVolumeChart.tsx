@@ -1,28 +1,47 @@
-// src/components/charts/TrafficVolumeChart.tsx
-'use client';
+// src/components/widgets/TrafficVolumeChart.tsx
+"use client";
 
 import dynamic from "next/dynamic";
-import { Card, CardContent } from "@/components/ui/card"; // اضافه شد
-
 const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
 export default function TrafficVolumeChart() {
-  const series = [{ name: "Vehicles", data: [1200, 1800, 2200, 2800, 3200, 2900, 2500] }];
+  const series = [{
+    name: "Traffic Volume",
+    data: [1200, 1500, 2200, 2800, 3200, 2900, 2500]
+  }];
+
   const options = {
-    chart: { type: 'area', height: 180, toolbar: { show: false }, sparkline: { enabled: true } },
-    colors: ['#10b981'],
-    fill: { type: 'gradient', gradient: { shadeIntensity: 1, opacityFrom: 0.7, opacityTo: 0.3 } },
-    xaxis: { categories: ['06', '08', '10', '12', '14', '16', '18'] },
-    stroke: { curve: 'smooth', width: 2 },
+    chart: { 
+      type: "area" as const,  // رفع خطا
+      height: 180, 
+      toolbar: { show: false },
+      sparkline: { enabled: true }
+    },
+    colors: ["#10b981"],
+    fill: { 
+      type: "gradient" as const,  // رفع خطا
+      gradient: { shadeIntensity: 1, opacityFrom: 0.7, opacityTo: 0.3 } 
+    },
+    xaxis: { 
+      categories: ['06:00', '08:00', '10:00', '12:00', '14:00', '16:00', '18:00']
+    },
+    stroke: { 
+      curve: "smooth" as const,  // رفع خطا
+      width: 3 
+    },
     dataLabels: { enabled: false },
-    title: { text: "Traffic Volume", align: "left", style: { fontSize: '14px', fontWeight: 'bold' } },
+    title: { 
+      text: "Traffic Volume Today", 
+      align: "left" as const,
+      style: { fontSize: '14px', color: '#fff' } 
+    }
   };
 
   return (
-    <Card>
-      <CardContent className="p-4">
-        <Chart options={options} series={series} type="area" height={180} />
-      </CardContent>
-    </Card>
+    <Chart 
+      options={options} 
+      series={series} 
+      height={180} 
+    />  // type="area" حذف شد
   );
 }

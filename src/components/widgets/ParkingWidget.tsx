@@ -14,7 +14,7 @@ export default function ParkingWidget() {
     <Card className="bg-gradient-to-br from-gray-800 to-gray-900 text-white">
       <CardHeader className="pb-2">
         <CardTitle className="text-sm flex justify-between">
-          <span>FREIE PARKPLÄTZE</span>
+          <span>Free Parking Spaces</span>
           <button className="text-xs">+</button>
         </CardTitle>
       </CardHeader>

@@ -1,7 +1,7 @@
 // src/app/map/page.tsx
-// هدف: نمایش نقشه زنده با موقعیت دوربین‌ها و سنسورها از Firestore
+// هدف: صفحه نقشه زنده با موقعیت دوربین‌ها و سنسورها از Firestore
 // کارکرد: داده‌ها رو زنده می‌گیره و روی MapLibre GL نمایش می‌ده
-// ویژگی: آیکون متفاوت برای دوربین (دوربین) و سنسور (Wind) + پاپ‌آپ حرفه‌ای
+// ویژگی: آیکون متفاوت + پاپ‌آپ کارت خفن با تصویر دوربین
 
 "use client";
 
@@ -9,17 +9,17 @@ import { useEffect, useState } from "react";
 import { db } from "@/lib/firebase";
 import { collection, onSnapshot } from "firebase/firestore";
 import Map, { Marker, Popup } from "react-map-gl/maplibre";
-import { Camera, AlertTriangle, Wind } from "lucide-react";
+import { Camera, AlertTriangle, Wind, Thermometer, Droplets } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import 'maplibre-gl/dist/maplibre-gl.css';
 
 export default function MapPage() {
-  const [cameras, setCameras] = useState([]);
-  const [sensors, setSensors] = useState([]);
-  const [selectedItem, setSelectedItem] = useState(null);
+  const [cameras, setCameras] = useState<any[]>([]); // رفع خطا
+  const [sensors, setSensors] = useState<any[]>([]); // رفع خطا
+  const [selectedItem, setSelectedItem] = useState<any>(null);
 
-  // داده دوربین‌ها از Firestore
+  // داده دوربین‌ها
   useEffect(() => {
     const unsubscribe = onSnapshot(collection(db, "traffic_cameras"), (snapshot) => {
       const data = snapshot.docs.map(doc => ({
@@ -32,7 +32,7 @@ export default function MapPage() {
     return () => unsubscribe();
   }, []);
 
-  // داده سنسورها از Firestore
+  // داده سنسورها
   useEffect(() => {
     const unsubscribe = onSnapshot(collection(db, "environmental_sensors"), (snapshot) => {
       const data = snapshot.docs.map(doc => ({
@@ -44,8 +44,6 @@ export default function MapPage() {
     });
     return () => unsubscribe();
   }, []);
-
-  const allItems = [...cameras, ...sensors];
 
   return (
     <div className="space-y-8">
@@ -74,6 +72,7 @@ export default function MapPage() {
           }}
           style={{ width: "100%", height: "100%" }}
           mapStyle="https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json"
+          onClick={() => setSelectedItem(null)}
         >
           {/* دوربین‌ها */}
           {cameras.map((cam) => (
@@ -121,7 +120,7 @@ export default function MapPage() {
               closeButton={true}
               closeOnClick={false}
               anchor="bottom"
-              offset={25}
+              offset={30}
             >
               <Card className="w-80 shadow-2xl border-none">
                 <CardHeader className="pb-2">
@@ -130,7 +129,17 @@ export default function MapPage() {
                     {selectedItem.name}
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-2 text-sm">
+                <CardContent className="space-y-3">
+                  {/* تصویر دوربین */}
+                  {selectedItem.type === "camera" && selectedItem.image_url && (
+                    <img
+                      src={selectedItem.image_url}
+                      alt="Camera view"
+                      className="w-full h-48 object-cover rounded-lg border border-white/20"
+                    />
+                  )}
+
+                  {/* داده‌های دوربین */}
                   {selectedItem.type === "camera" && (
                     <>
                       <p><strong>Last Plate:</strong> {selectedItem.last_plate || "N/A"}</p>
@@ -145,14 +154,15 @@ export default function MapPage() {
                     </>
                   )}
 
+                  {/* داده‌های سنسور */}
                   {selectedItem.type === "sensor" && (
                     <>
                       <div className="flex items-center gap-2">
-                        <Thermometer className="w-4 h-4" />
+                        <Thermometer className="w-5 h-5 text-orange-400" />
                         <strong>Temperature:</strong> {selectedItem.temperature}°C
                       </div>
                       <div className="flex items-center gap-2">
-                        <Droplets className="w-4 h-4" />
+                        <Droplets className="w-5 h-5 text-blue-400" />
                         <strong>Humidity:</strong> {selectedItem.humidity}%
                       </div>
                       <p><strong>AQI:</strong> {selectedItem.aqi} ({selectedItem.aqi_level})</p>

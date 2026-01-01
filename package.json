@@ -21,6 +21,8 @@
     "dotenv": "^17.2.3",
     "firebase": "^12.4.0",
     "firebase-admin": "^13.6.0",
+    "lodash": "^4.17.21",
+    "lodash.isequal": "^4.5.0",
     "lucide-react": "^0.548.0",
     "maplibre-gl": "^5.15.0",
     "next": "16.0.0",
@@ -28,6 +30,7 @@
     "react": "19.2.0",
     "react-apexcharts": "^1.8.0",
     "react-dom": "19.2.0",
+    "react-gauge-chart": "^0.5.1",
     "react-hot-toast": "^2.6.0",
     "react-map-gl": "^8.1.0",
     "tailwind-merge": "^3.3.1"

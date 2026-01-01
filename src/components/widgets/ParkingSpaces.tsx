@@ -10,7 +10,7 @@ export default function ParkingSpaces() {
   return (
     <div className="bg-gradient-to-br from-gray-800 to-gray-900 p-4 rounded-lg text-white">
       <div className="flex justify-between items-center mb-3">
-        <h3 className="text-sm font-semibold">FREIE PARKPLÄTZE</h3>
+        <h3 className="text-sm font-semibold">Free Parking Spaces</h3>
         <button className="text-xs">+</button>
       </div>
       {spots.map((spot) => (
