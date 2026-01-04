@@ -1,108 +1,105 @@
-// src/app/environment/page.tsx
+// src/app/energy/page.tsx
 "use client";
 
-import { useEffect, useState } from "react";
-import { db } from "@/lib/firebase";
-import { collection, onSnapshot } from "firebase/firestore";
-import Map, { Marker } from "react-map-gl/maplibre";
-import { Wind, Trees } from "lucide-react";
+import { Zap, TrendingUp, Sun, Wind, Leaf } from "lucide-react";
+import dynamic from "next/dynamic";
 import SimpleGauge from "@/components/ui/SimpleGauge";
-import "maplibre-gl/dist/maplibre-gl.css";
-export default function EnvironmentPage() {
-  const renewableShare = 76;
-  const [sensors, setSensors] = useState<any[]>([]); // رفع خطا — نوع any[]
-  const [aqi, setAqi] = useState(42);
-  const [aqiLevel, setAqiLevel] = useState("Good");
 
-  useEffect(() => {
-    const unsubscribe = onSnapshot(
-      collection(db, "environmental_sensors"),
-      (snapshot) => {
-        const data = snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        setSensors(data); // حالا خطا نمی‌ده
+const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
-        if (data.length > 0) {
-          const avgAqi =
-            data.reduce((sum: number, s: any) => sum + s.aqi, 0) / data.length;
-          setAqi(Math.round(avgAqi));
-          if (avgAqi <= 50) setAqiLevel("Good");
-          else if (avgAqi <= 100) setAqiLevel("Moderate");
-          else setAqiLevel("Poor");
-        }
+export default function EnergyPage() {
+  const renewableShare = 76; // درصد تجدیدپذیر
+
+  const series = [{ name: "Energy Consumption (MW)", data: [45, 52, 58, 69, 82, 91, 78] }];
+
+  const options = {
+    chart: { type: "line" as const, height: 350, toolbar: { show: false } },
+    colors: ["#f59e0b"],
+    stroke: { curve: "smooth" as const, width: 4 },
+    fill: {
+      type: "gradient" as const,
+      gradient: { shadeIntensity: 1, opacityFrom: 0.7, opacityTo: 0.3 }
+    },
+    xaxis: { 
+      categories: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+      title: { text: "Day of Week", style: { color: '#9ca3af' } }
+    },
+    yaxis: { 
+      title: { text: "MW", style: { color: '#9ca3af' } },
+      labels: { style: { colors: '#9ca3af' } }
+    },
+    title: { 
+      text: "Weekly Energy Consumption", 
+      align: "left" as const,
+      style: { fontSize: '18px', fontWeight: 'bold', color: '#fff' }
+    },
+    tooltip: {
+      theme: 'dark' as const,
+      style: { fontSize: '14px' },
+      y: { formatter: (val: number) => `${val} MW` },
+      custom: function({ series, seriesIndex, dataPointIndex, w }: any) {
+        return (
+          `<div style="background: #1f2937; color: #fff; padding: 12px; border-radius: 8px; border: 1px solid #374151;">
+            <span style="font-weight: bold;">${w.globals.categoryLabels[dataPointIndex]}</span><br/>
+            <span>${series[seriesIndex][dataPointIndex]} MW</span>
+          </div>`
+        );
       }
-    );
-    return () => unsubscribe();
-  }, []);
-
-  const getAqiColor = () => {
-    if (aqiLevel === "Good") return "text-green-400";
-    if (aqiLevel === "Moderate") return "text-orange-400";
-    return "text-red-400";
+    }
   };
 
   return (
-    <div className="space-y-8">
-      <h1 className="text-4xl font-bold text-white flex items-center gap-3">
-        <Trees className="w-10 h-10 text-green-400" />
-        Environment Monitoring
-      </h1>
-      <p className="text-gray-300 text-lg">
-        Air quality, noise levels, and environmental sensors across the city
-      </p>
-
-      {/* کارت‌ها */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {/* گیج AQI */}
-        <div className="bg-gradient-to-br from-teal-600 to-green-600 rounded-xl p-8 text-white">
-          <h3 className="text-2xl font-bold">Air Quality Index</h3>
-          <div className="mt-4">
-            <div className="mt-4">
-              <SimpleGauge value={renewableShare} size={180} label="Renewable" />
-            </div>
-            <p className="text-sm opacity-90 text-center -mt-4">
-              Renewable Share
-            </p>
-          </div>
-          <p className={`text-3xl font-bold text-center mt-4 ${getAqiColor()}`}>
-            {aqiLevel}
-          </p>
-        </div>
-
-        {/* PM2.5 و Noise */}
-        {/* ... بقیه کارت‌ها */}
+    <div className="space-y-8 p-4 md:p-8">
+      <div>
+        <h1 className="text-3xl md:text-4xl font-bold text-white mb-2 flex items-center gap-3">
+          <Zap className="w-8 h-8 md:w-10 md:h-10 text-yellow-400" />
+          Energy Management
+        </h1>
+        <p className="text-gray-300 text-base md:text-lg">Real-time energy consumption, renewable production</p>
       </div>
 
-      {/* نقشه */}
-      <div>
-        <h2 className="text-2xl font-bold text-white mb-4">
-          Environmental Sensors Map
-        </h2>
-        <div className="rounded-xl overflow-hidden shadow-2xl h-96">
-          <Map
-            initialViewState={{
-              longitude: -0.1278,
-              latitude: 51.5074,
-              zoom: 11,
-            }}
-            style={{ width: "100%", height: "100%" }}
-            mapStyle="https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json"
-          >
-            {sensors.map((sensor) => (
-              <Marker
-                key={sensor.id}
-                longitude={sensor.location.lng}
-                latitude={sensor.location.lat}
-              >
-                <div className="p-3 rounded-full shadow-lg cursor-pointer hover:scale-110 transition bg-teal-500">
-                  <Wind className="w-6 h-6 text-white" />
-                </div>
-              </Marker>
-            ))}
-          </Map>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
+        {/* Solar Production */}
+        <div className="bg-gradient-to-br from-yellow-500 to-orange-600 rounded-xl p-6 text-white">
+          <Sun className="w-10 h-10 mb-3 opacity-90" />
+          <p className="text-4xl md:text-5xl font-bold">1,284 MW</p>
+          <p className="text-sm opacity-90">Solar Production</p>
         </div>
+
+        {/* Wind Production */}
+        <div className="bg-gradient-to-br from-blue-500 to-cyan-600 rounded-xl p-6 text-white">
+          <Wind className="w-10 h-10 mb-3 opacity-90" />
+          <p className="text-4xl md:text-5xl font-bold">892 MW</p>
+          <p className="text-sm opacity-90">Wind Production</p>
+        </div>
+
+        {/* Renewable Share با گیج */}
+        <div className="bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl p-6 text-white">
+          <TrendingUp className="w-10 h-10 mb-3 opacity-90" />
+          <div className="mt-4 flex justify-center">
+            <SimpleGauge value={renewableShare} size={160} label="Renewable" />
+          </div>
+          <p className="text-sm opacity-90 text-center -mt-2">Renewable Share</p>
+        </div>
+
+        {/* Daily Total */}
+        <div className="bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl p-6 text-white">
+          <Zap className="w-10 h-10 mb-3 opacity-90" />
+          <p className="text-4xl md:text-5xl font-bold">4.2 GWh</p>
+          <p className="text-sm opacity-90">Daily Total</p>
+        </div>
+
+        {/* Carbon Saved */}
+        <div className="bg-gradient-to-br from-teal-600 to-cyan-600 rounded-xl p-6 text-white">
+          <Leaf className="w-10 h-10 mb-3 opacity-90" />
+          <p className="text-4xl md:text-5xl font-bold">1,250 t</p>
+          <p className="text-sm opacity-90">Carbon Saved Today</p>
+        </div>
+      </div>
+
+      {/* نمودار */}
+      <div className="bg-gray-800 rounded-xl p-4 md:p-6">
+        <Chart options={options} series={series} height={350} />
       </div>
     </div>
   );

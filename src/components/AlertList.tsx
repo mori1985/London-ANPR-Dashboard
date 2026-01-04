@@ -30,7 +30,6 @@ export default function AlertList() {
     }
   };
 
-  // شبیه‌سازی هشدار جدید
   useEffect(() => {
     const interval = setInterval(() => {
       if (Math.random() > 0.7) {
@@ -49,7 +48,6 @@ export default function AlertList() {
     return () => clearInterval(interval);
   }, []);
 
-  // درخواست مجوز نوتیفیکیشن
   useEffect(() => {
     if (Notification.permission === "default") {
       Notification.requestPermission();
@@ -59,11 +57,11 @@ export default function AlertList() {
   if (alerts.length === 0) return null;
 
   return (
-    <div className="space-y-2">
+    <div className="fixed top-20 right-4 z-50 space-y-2 w-full max-w-sm">
       {alerts.map((alert) => (
-        <Alert key={alert.id} className="border-pink-200 bg-pink-50">
-          <Bell className="h-4 w-4 text-pink-600" />
-          <AlertDescription className="flex items-center justify-between">
+        <Alert key={alert.id} className="border-pink-200 bg-pink-50 dark:bg-pink-950/50 shadow-lg">
+          <Bell className="h-4 w-4 md:h-5 md:w-5 text-pink-600" />
+          <AlertDescription className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 text-sm">
             <span>
               <strong>{alert.plate}</strong> at <strong>{alert.camera}</strong>
             </span>

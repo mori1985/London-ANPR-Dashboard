@@ -11,28 +11,18 @@ export default function TrafficVolume() {
   }];
 
   const options = {
-    chart: { 
-      type: "area" as const,  // رفع خطا
-      height: 200, 
-      toolbar: { show: false } 
-    },
+    chart: { type: "area" as const, height: 200, toolbar: { show: false } },
     colors: ["#10b981"],
-    fill: { 
-      type: "gradient" as const,  // رفع خطا
-      gradient: { shadeIntensity: 1, opacityFrom: 0.7, opacityTo: 0.3 } 
-    },
-    xaxis: { 
-      categories: ['06:00', '08:00', '10:00', '12:00', '14:00', '16:00', '18:00']
-    },
+    fill: { type: "gradient" as const, gradient: { shadeIntensity: 1, opacityFrom: 0.7, opacityTo: 0.3 } },
+    xaxis: { categories: ['06:00', '08:00', '10:00', '12:00', '14:00', '16:00', '18:00'] },
     stroke: { curve: "smooth" as const, width: 3 },
-    dataLabels: { enabled: false }
+    dataLabels: { enabled: false },
+    tooltip: { theme: 'dark' as const }
   };
 
   return (
-    <Chart 
-      options={options} 
-      series={series} 
-      height={200} 
-    />  // type="area" حذف شد
+    <div className="w-full">
+      <Chart options={options} series={series} height={200} />
+    </div>
   );
 }

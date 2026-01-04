@@ -26,7 +26,7 @@ export default function StatsCards() {
   }, []);
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
       {[
         { label: "Total", value: stats.total, color: "bg-blue-500" },
         { label: "Online", value: stats.online, color: "bg-green-500", icon: CheckCircle },
@@ -35,12 +35,12 @@ export default function StatsCards() {
         { label: "Plates Today", value: stats.plates, color: "bg-indigo-500" },
       ].map((stat) => (
         <Card key={stat.label} className={`${stat.color} text-white border-0`}>
-          <CardContent className="p-4 text-center">
-            <p className="text-sm opacity-90 flex items-center justify-center gap-1">
+          <CardContent className="p-3 md:p-4 text-center">
+            <p className="text-xs md:text-sm opacity-90 flex items-center justify-center gap-1">
               {stat.icon && <stat.icon className="w-4 h-4" />}
               {stat.label}
             </p>
-            <p className="text-3xl font-bold">{stat.value}</p>
+            <p className="text-2xl md:text-3xl font-bold">{stat.value}</p>
           </CardContent>
         </Card>
       ))}

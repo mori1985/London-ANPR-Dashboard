@@ -58,9 +58,9 @@ export default function Header() {
   };
 
   return (
-    <header className="h-16 bg-gray-900 border-b border-white/10 flex items-center justify-between px-6">
-      {/* Quick Stats */}
-      <div className="flex items-center gap-8">
+    <header className="h-16 bg-gray-900 border-b border-white/10 flex items-center justify-between px-4 md:px-6 fixed top-0 left-0 right-0 z-40">
+      {/* Quick Stats — فقط در دسکتاپ نمایش بده */}
+      <div className="hidden lg:flex items-center gap-8">
         <div className="flex items-center gap-3">
           <Camera className="w-6 h-6 text-green-400" />
           <div>
@@ -86,8 +86,9 @@ export default function Header() {
         </div>
       </div>
 
-      <div className="flex items-center gap-6">
-        {/* نوتیفیکیشن با dropdown کامل */}
+      {/* راست هدر: نوتیفیکیشن + کاربر */}
+      <div className="flex items-center gap-4 md:gap-6">
+        {/* نوتیفیکیشن */}
         <div className="relative" ref={notificationRef}>
           <button
             onClick={() => setShowNotifications(!showNotifications)}
@@ -101,7 +102,7 @@ export default function Header() {
           </button>
 
           {showNotifications && (
-            <div className="absolute right-0 mt-2 w-96 bg-gray-800 rounded-xl shadow-2xl border border-white/20 overflow-hidden z-50">
+            <div className="absolute right-0 mt-2 w-80 md:w-96 bg-gray-800 rounded-xl shadow-2xl border border-white/20 overflow-hidden z-50">
               <div className="p-4 border-b border-white/10">
                 <h3 className="text-lg font-bold text-white">
                   Notifications ({notifications.length})
@@ -125,12 +126,8 @@ export default function Header() {
                       />
                       <div className="flex-1">
                         <p className="text-white font-medium">{notif.title}</p>
-                        <p className="text-gray-400 text-sm mt-1">
-                          {notif.description}
-                        </p>
-                        <p className="text-gray-500 text-xs mt-2">
-                          {notif.time}
-                        </p>
+                        <p className="text-gray-400 text-sm mt-1">{notif.description}</p>
+                        <p className="text-gray-500 text-xs mt-2">{notif.time}</p>
                       </div>
                     </div>
                   </div>
@@ -145,24 +142,22 @@ export default function Header() {
           )}
         </div>
 
-        {/* کاربر و Logout */}
+        {/* کاربر و Logout/Sign In */}
         {user ? (
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-3">
-              <img
-                src={user.photoURL || "https://via.placeholder.com/40"}
-                alt={user.displayName || "User"}
-                className="w-10 h-10 rounded-full object-cover ring-2 ring-white/20"
-              />
-              <div className="hidden md:block">
-                <p className="text-white font-medium">{user.displayName || "Administrator"}</p>
-                <p className="text-gray-400 text-xs">Smart City Pro</p>
-              </div>
+          <div className="flex items-center gap-3 md:gap-4">
+            <img
+              src={user.photoURL || "https://via.placeholder.com/40"}
+              alt={user.displayName || "User"}
+              className="w-9 h-9 md:w-10 md:h-10 rounded-full object-cover ring-2 ring-white/20"
+            />
+            <div className="hidden lg:block">
+              <p className="text-white font-medium text-sm md:text-base">{user.displayName || "Administrator"}</p>
+              <p className="text-gray-400 text-xs">Smart City Pro</p>
             </div>
 
             <button
               onClick={handleLogout}
-              className="px-4 py-2 bg-red-600 hover:bg-red-700 rounded-lg text-white font-medium transition shadow-lg"
+              className="px-3 py-1.5 md:px-4 md:py-2 bg-red-600 hover:bg-red-700 rounded-lg text-white text-sm md:text-base font-medium transition shadow-lg"
             >
               Logout
             </button>
@@ -170,7 +165,7 @@ export default function Header() {
         ) : (
           <button
             onClick={() => router.push("/login")}
-            className="px-6 py-2 bg-gradient-to-r from-pink-600 to-blue-600 hover:from-pink-700 hover:to-blue-700 rounded-lg text-white font-medium transition shadow-lg"
+            className="px-4 py-2 md:px-6 md:py-2 bg-gradient-to-r from-pink-600 to-blue-600 hover:from-pink-700 hover:to-blue-700 rounded-lg text-white font-medium transition shadow-lg"
           >
             Sign In
           </button>

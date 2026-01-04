@@ -1,8 +1,4 @@
 // src/app/map/page.tsx
-// هدف: صفحه نقشه زنده با موقعیت دوربین‌ها و سنسورها از Firestore
-// کارکرد: داده‌ها رو زنده می‌گیره و روی MapLibre GL نمایش می‌ده
-// ویژگی: آیکون متفاوت + پاپ‌آپ کارت خفن با تصویر دوربین
-
 "use client";
 
 import { useEffect, useState } from "react";
@@ -15,13 +11,12 @@ import { Badge } from "@/components/ui/badge";
 import 'maplibre-gl/dist/maplibre-gl.css';
 
 export default function MapPage() {
-  const [cameras, setCameras] = useState<any[]>([]); // رفع خطا
-  const [sensors, setSensors] = useState<any[]>([]); // رفع خطا
+  const [cameras, setCameras] = useState<any[]>([]);
+  const [sensors, setSensors] = useState<any[]>([]);
   const [selectedItem, setSelectedItem] = useState<any>(null);
 
-  // داده دوربین‌ها
   useEffect(() => {
-    const unsubscribe = onSnapshot(collection(db, "traffic_cameras"), (snapshot) => {
+    const unsubscribeCameras = onSnapshot(collection(db, "traffic_cameras"), (snapshot) => {
       const data = snapshot.docs.map(doc => ({
         id: doc.id,
         type: "camera",
@@ -29,12 +24,8 @@ export default function MapPage() {
       }));
       setCameras(data);
     });
-    return () => unsubscribe();
-  }, []);
 
-  // داده سنسورها
-  useEffect(() => {
-    const unsubscribe = onSnapshot(collection(db, "environmental_sensors"), (snapshot) => {
+    const unsubscribeSensors = onSnapshot(collection(db, "environmental_sensors"), (snapshot) => {
       const data = snapshot.docs.map(doc => ({
         id: doc.id,
         type: "sensor",
@@ -42,28 +33,32 @@ export default function MapPage() {
       }));
       setSensors(data);
     });
-    return () => unsubscribe();
+
+    return () => {
+      unsubscribeCameras();
+      unsubscribeSensors();
+    };
   }, []);
 
   return (
-    <div className="space-y-8">
-      <div className="flex items-center justify-between">
+    <div className="space-y-8 p-4 md:p-8">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
-          <h1 className="text-4xl font-bold text-white mb-2">Live City Map</h1>
-          <p className="text-gray-400">Real-time view of ANPR cameras and environmental sensors</p>
+          <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">Live City Map</h1>
+          <p className="text-gray-400 text-base md:text-lg">Real-time view of ANPR cameras and environmental sensors</p>
         </div>
-        <div className="flex gap-3">
-          <button className="px-5 py-2.5 bg-white/10 rounded-lg text-white hover:bg-white/20 transition">
+        <div className="flex flex-wrap gap-3">
+          <button className="px-4 py-2 bg-white/10 rounded-lg text-white hover:bg-white/20 transition">
             Traffic Layer
           </button>
-          <button className="px-5 py-2.5 bg-white/10 rounded-lg text-white hover:bg-white/20 transition">
+          <button className="px-4 py-2 bg-white/10 rounded-lg text-white hover:bg-white/20 transition">
             Heatmap
           </button>
         </div>
       </div>
 
-      {/* نقشه واقعی */}
-      <div className="rounded-xl overflow-hidden shadow-2xl h-96 md:h-[600px]">
+      {/* نقشه */}
+      <div className="rounded-xl overflow-hidden shadow-2xl h-80 md:h-96 lg:h-[600px]">
         <Map
           initialViewState={{
             longitude: -0.1278,
@@ -74,7 +69,6 @@ export default function MapPage() {
           mapStyle="https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json"
           onClick={() => setSelectedItem(null)}
         >
-          {/* دوربین‌ها */}
           {cameras.map((cam) => (
             <Marker
               key={cam.id}
@@ -88,13 +82,12 @@ export default function MapPage() {
               <div className={`p-2 rounded-full shadow-lg cursor-pointer hover:scale-110 transition ${
                 cam.status === "online" ? "bg-green-500" : "bg-red-500"
               }`}>
-                <Camera className="w-6 h-6 text-white" />
-                {cam.alert && <AlertTriangle className="w-4 h-4 text-yellow-400 absolute -top-1 -right-1" />}
+                <Camera className="w-5 h-5 md:w-6 md:h-6 text-white" />
+                {cam.alert && <AlertTriangle className="w-3 h-3 md:w-4 md:h-4 text-yellow-400 absolute -top-1 -right-1" />}
               </div>
             </Marker>
           ))}
 
-          {/* سنسورها */}
           {sensors.map((sensor) => (
             <Marker
               key={sensor.id}
@@ -105,13 +98,12 @@ export default function MapPage() {
                 setSelectedItem(sensor);
               }}
             >
-              <div className="p-3 rounded-full shadow-lg cursor-pointer hover:scale-110 transition bg-teal-500">
-                <Wind className="w-6 h-6 text-white" />
+              <div className="p-2 md:p-3 rounded-full shadow-lg cursor-pointer hover:scale-110 transition bg-teal-500">
+                <Wind className="w-5 h-5 md:w-6 md:h-6 text-white" />
               </div>
             </Marker>
           ))}
 
-          {/* پاپ‌آپ کارت خفن */}
           {selectedItem && (
             <Popup
               longitude={selectedItem.location.lng}
@@ -122,24 +114,22 @@ export default function MapPage() {
               anchor="bottom"
               offset={30}
             >
-              <Card className="w-80 shadow-2xl border-none">
+              <Card className="w-72 md:w-80 shadow-2xl border-none">
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-lg flex items-center gap-2">
+                  <CardTitle className="text-base md:text-lg flex items-center gap-2">
                     {selectedItem.type === "camera" ? <Camera className="w-5 h-5" /> : <Wind className="w-5 h-5" />}
                     {selectedItem.name}
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-3">
-                  {/* تصویر دوربین */}
+                <CardContent className="space-y-2 text-sm">
                   {selectedItem.type === "camera" && selectedItem.image_url && (
                     <img
                       src={selectedItem.image_url}
                       alt="Camera view"
-                      className="w-full h-48 object-cover rounded-lg border border-white/20"
+                      className="w-full h-40 md:h-48 object-cover rounded-lg border border-white/20"
                     />
                   )}
 
-                  {/* داده‌های دوربین */}
                   {selectedItem.type === "camera" && (
                     <>
                       <p><strong>Last Plate:</strong> {selectedItem.last_plate || "N/A"}</p>
@@ -154,7 +144,6 @@ export default function MapPage() {
                     </>
                   )}
 
-                  {/* داده‌های سنسور */}
                   {selectedItem.type === "sensor" && (
                     <>
                       <div className="flex items-center gap-2">
@@ -176,24 +165,24 @@ export default function MapPage() {
       </div>
 
       {/* آمار پایین نقشه */}
-      <div className="grid grid-cols-4 gap-6">
-        <div className="bg-green-500/20 border border-green-500/50 rounded-xl p-6 text-center">
-          <p className="text-4xl font-bold text-green-400">{cameras.filter(c => c.status === "online").length}</p>
-          <p className="text-gray-400">Online Cameras</p>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+        <div className="bg-green-500/20 border border-green-500/50 rounded-xl p-4 md:p-6 text-center">
+          <p className="text-3xl md:text-4xl font-bold text-green-400">{cameras.filter(c => c.status === "online").length}</p>
+          <p className="text-gray-400 text-sm md:text-base">Online Cameras</p>
         </div>
-        <div className="bg-teal-500/20 border border-teal-500/50 rounded-xl p-6 text-center">
-          <p className="text-4xl font-bold text-teal-400">{sensors.length}</p>
-          <p className="text-gray-400">Active Sensors</p>
+        <div className="bg-teal-500/20 border border-teal-500/50 rounded-xl p-4 md:p-6 text-center">
+          <p className="text-3xl md:text-4xl font-bold text-teal-400">{sensors.length}</p>
+          <p className="text-gray-400 text-sm md:text-base">Active Sensors</p>
         </div>
-        <div className="bg-yellow-500/20 border border-yellow-500/50 rounded-xl p-6 text-center">
-          <p className="text-4xl font-bold text-yellow-400">{cameras.filter(c => c.alert).length}</p>
-          <p className="text-gray-400">Alerts</p>
+        <div className="bg-yellow-500/20 border border-yellow-500/50 rounded-xl p-4 md:p-6 text-center">
+          <p className="text-3xl md:text-4xl font-bold text-yellow-400">{cameras.filter(c => c.alert).length}</p>
+          <p className="text-gray-400 text-sm md:text-base">Alerts</p>
         </div>
-        <div className="bg-blue-500/20 border border-blue-500/50 rounded-xl p-6 text-center">
-          <p className="text-4xl font-bold text-blue-400">
+        <div className="bg-blue-500/20 border border-blue-500/50 rounded-xl p-4 md:p-6 text-center">
+          <p className="text-3xl md:text-4xl font-bold text-blue-400">
             {cameras.reduce((sum, c) => sum + (c.plates_count || 0), 0)}
           </p>
-          <p className="text-gray-400">Plates Today</p>
+          <p className="text-gray-400 text-sm md:text-base">Plates Today</p>
         </div>
       </div>
     </div>

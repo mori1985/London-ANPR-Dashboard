@@ -4,8 +4,7 @@
 import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Badge } from "@/components/ui/badge";
-import { Search, Filter } from "lucide-react";
+import { Search } from "lucide-react";
 
 interface FiltersProps {
   onFilter: (filters: any) => void;
@@ -21,7 +20,7 @@ export default function Filters({ onFilter }: FiltersProps) {
   }, [search, status, hasAlert, onFilter]);
 
   return (
-    <div className="flex flex-col md:flex-row gap-3">
+    <div className="flex flex-col gap-3 md:flex-row md:items-end">
       <div className="relative flex-1">
         <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
         <Input
@@ -32,7 +31,7 @@ export default function Filters({ onFilter }: FiltersProps) {
         />
       </div>
       <Select value={status} onValueChange={setStatus}>
-        <SelectTrigger className="w-40">
+        <SelectTrigger className="w-full md:w-40">
           <SelectValue placeholder="Status" />
         </SelectTrigger>
         <SelectContent>
@@ -42,7 +41,7 @@ export default function Filters({ onFilter }: FiltersProps) {
         </SelectContent>
       </Select>
       <Select value={hasAlert} onValueChange={setHasAlert}>
-        <SelectTrigger className="w-40">
+        <SelectTrigger className="w-full md:w-40">
           <SelectValue placeholder="Alerts" />
         </SelectTrigger>
         <SelectContent>
