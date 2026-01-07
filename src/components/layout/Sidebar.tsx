@@ -36,7 +36,8 @@ export default function Sidebar() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const menuContent = (
-    <>
+    <div className="flex flex-col h-full">
+      {/* لوگو — بالای هدر */}
       <div className="p-6 border-b border-white/10">
         <h1 className="text-2xl font-bold bg-gradient-to-r from-pink-500 to-blue-500 bg-clip-text text-transparent">
           Smart City Pro
@@ -44,7 +45,7 @@ export default function Sidebar() {
         <p className="text-xs text-gray-400 mt-1">London Control Center</p>
       </div>
 
-      <nav className="mt-4 flex-1">
+      <nav className="mt-4 flex-1 overflow-y-auto px-4 pb-20"> {/* pb-20 برای فضای پایین */}
         {menuItems.map((item) => {
           const Icon = item.icon;
           const isActive = pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href));
@@ -54,9 +55,9 @@ export default function Sidebar() {
               key={item.href}
               href={item.href}
               onClick={() => setMobileOpen(false)}
-              className={`flex items-center gap-3 px-6 py-3 transition-all ${
+              className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
                 isActive
-                  ? "bg-gradient-to-r from-pink-600 to-blue-600 text-white border-r-4 border-white"
+                  ? "bg-gradient-to-r from-pink-600 to-blue-600 text-white"
                   : "hover:bg-white/10 text-gray-300"
               }`}
             >
@@ -70,12 +71,12 @@ export default function Sidebar() {
       <div className="p-6 border-t border-white/10">
         <p className="text-xs text-gray-500">© 2025 Smart City Pro</p>
       </div>
-    </>
+    </div>
   );
 
   return (
     <>
-      {/* Hamburger button برای موبایل */}
+      {/* Hamburger button */}
       <button
         onClick={() => setMobileOpen(!mobileOpen)}
         className="fixed top-4 left-4 z-50 md:hidden p-2 bg-gray-800 rounded-lg shadow-lg"
@@ -83,18 +84,18 @@ export default function Sidebar() {
         {mobileOpen ? <X className="w-6 h-6 text-white" /> : <Menu className="w-6 h-6 text-white" />}
       </button>
 
-      {/* سایدبار */}
-      <div className={`fixed inset-y-0 left-0 z-40 w-64 bg-gray-900 flex flex-col transform transition-transform duration-300 ${
+      {/* سایدبار — z-index بالاتر از هدر (z-50) و top-16 برای زیر هدر نرفتن */}
+      <div className={`fixed top-16 left-0 bottom-0 z-50 w-64 bg-gray-900 flex flex-col transform transition-transform duration-300 overflow-y-auto ${
         mobileOpen ? "translate-x-0" : "-translate-x-full"
-      } md:translate-x-0 md:static border-r border-white/10`}>
+      } md:top-0 md:translate-x-0 border-r border-white/10`}>
         {menuContent}
       </div>
 
-      {/* Overlay برای بستن در موبایل */}
+      {/* Overlay */}
       {mobileOpen && (
         <div
           onClick={() => setMobileOpen(false)}
-          className="fixed inset-0 bg-black/50 z-30 md:hidden"
+          className="fixed inset-0 bg-black/50 z-40 md:hidden"
         />
       )}
     </>
